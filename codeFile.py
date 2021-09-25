@@ -23,9 +23,11 @@ class myCallBack(tf.keras.callbacks.Callback):
         if(logs.get('accuracy')>0.95 and logs.get('val_accuracy')>0.85):
             print("Stopped. Reached 90% accuracy")
             self.model.stop_training = True
-            
+
+#replace fPath value with the path of the dataset on your computer
 fPath = 'C:\\Users\\HAITHAM\\Desktop\\PlantVillage'
 training = []
+#replace the path to the path of dataset on your computer
 labels = list(os.listdir('C:\\Users\\HAITHAM\\Desktop\\PlantVillage'))
 print("Labels are: \n")
 print(labels)
@@ -34,12 +36,18 @@ results2 = []
 #Printinga table contains each label with quantity of images in it
 for disease in list_diseases:
     dies_name_count = {}
+    
+    #replace the path to the path of dataset on your computer
     count_disease = len(os.listdir('C:\\Users\\HAITHAM\\Desktop\\PlantVillage'))
     dies_name_count['disease'] = disease
     dies_name_count['count_images'] = count_disease
     results2.append(dies_name_count)
 results = pd.DataFrame(results2)
 print(results)
+
+#This is to illostrate any image size 
+#for calculating use only
+##replace the path to the path of dataset on your computer
 im = Image.open('C:\\Users\\HAITHAM\\Desktop\\PlantVillage\\Tomato_Leaf_Mold/00694db7-3327-45e0-b4da-a8bb7ab6a4b7___Crnl_L.Mold 6923.JPG')
 
 h,w = im.size
@@ -76,6 +84,7 @@ Y = np_utils.to_categorical(y, 15)
 
 X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=0,shuffle=True)
 
+#sequential model
 model = Sequential([
     Conv2D(16, (3,3), activation='relu',input_shape=(64,64,3)),
     MaxPooling2D((2,2),strides=2),
@@ -90,6 +99,7 @@ model = Sequential([
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])        
 callbacks = myCallBack()
 #testing the splitted data
+#validation takes the test objects
 history = model.fit(X_train, y_train, batch_size= 16, epochs=20, verbose=1, validation_data=(X_test, y_test),callbacks=[callbacks])
 model.save('./plantDieasesPrediction')
 
@@ -129,6 +139,7 @@ print(classification_report(y_target, pred, target_names = labels))
 
 
 #Insert you input image path to predict it's disease
+#replace the path to the path of dataset on your computer
 test_img_path = 'C:\\Users\\HAITHAM\\Desktop\\test\\tomato-septoria-leaf-spot-grabowski.JPG'
 img = keras.preprocessing.image.load_img(
     test_img_path, target_size=(64, 64)
